@@ -11,6 +11,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mx.com.gruposalinas.sistemas.casadebolsa.model.entity.Cliente;
@@ -34,7 +36,6 @@ public class ClienteDao {
         ResultSet rs = null;
         try {
             conexion = Conexion.obtenConexion();
-            System.out.println(conexion);
             pStmt = conexion.prepareStatement(sqlSelect);
             pStmt.setInt(1, c.getClaveCliente());
             pStmt.setString(2, c.getNombre());
@@ -94,6 +95,7 @@ public class ClienteDao {
                 c.setApellidoMaterno(rs.getString("APELLIDOMATERNO"));
                 c.setRfc("RFC");
                 c.setFechaNacimiento((rs.getDate("FECHANACIMIENTO")).toLocalDate());
+                c.setPortafolio(new Portafolio());
             }
         } catch (SQLException ex) {
             Logger.getLogger(ClienteDao.class.getName()).log(Level.SEVERE, null, ex);
@@ -134,5 +136,33 @@ public class ClienteDao {
         } finally {
             Conexion.cierraObjeto(rs, pStmt, conexion);
         }
+    }
+        public List<Cliente> obtenListadoClientes() {
+        List<Cliente> clientes = null;
+        var sqlSelect = "SELECT * FROM CLIENTE";
+        Connection conexion = null;
+        PreparedStatement pStmt = null;
+        ResultSet rs = null;
+        try {
+            conexion = Conexion.obtenConexion();
+            pStmt = conexion.prepareStatement(sqlSelect);
+            rs = pStmt.executeQuery();
+            clientes = new ArrayList<>();
+            while (rs.next()) {
+                Cliente c1=new Cliente();
+                c1.setClaveCliente(rs.getInt("CLAVECLIENTE"));
+                c1.setNombre(rs.getString("NOMBRES"));
+                c1.setApellidoPaterno(rs.getString("APELLIDOPATERNO"));
+                c1.setApellidoMaterno(rs.getString("APELLIDOMATERNO"));
+                c1.setRfc(rs.getString("RFC"));
+                c1.setFechaNacimiento((rs.getDate("FECHANACIMIENTO")).toLocalDate());
+                c1.setPortafolio(new Portafolio());
+                clientes.add(c1);
+            }
+        } catch (SQLException ex) {
+        } finally {
+            Conexion.cierraObjeto(rs, pStmt, conexion);
+        }
+        return clientes;
     }
 }

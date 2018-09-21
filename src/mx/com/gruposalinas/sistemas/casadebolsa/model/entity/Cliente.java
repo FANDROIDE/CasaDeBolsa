@@ -50,11 +50,12 @@ public class Cliente extends Persona {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Nombre: ").append(nombre)
-                .append("Apellido Paterno: ").append(apellidoPaterno)
-                .append("Apellido Materno: ").append(apellidoMaterno)
-                .append("RFC: ").append(rfc)
-                .append("Fecha de Nacimiento: ").append(fechaNacimiento);
+        sb.append("Id: ").append(claveCliente).
+                append(" Nombre: ").append(nombre)
+                .append(" Apellido Paterno: ").append(apellidoPaterno)
+                .append(" Apellido Materno: ").append(apellidoMaterno)
+                .append(" RFC: ").append(rfc)
+                .append(" Fecha de Nacimiento: ").append(fechaNacimiento);
         return sb.toString();
     }
 

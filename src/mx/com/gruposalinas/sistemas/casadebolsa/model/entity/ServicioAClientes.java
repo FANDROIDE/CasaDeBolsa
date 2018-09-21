@@ -5,6 +5,10 @@
  */
 package mx.com.gruposalinas.sistemas.casadebolsa.model.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+import mx.com.gruposalinas.sistemas.casadebolsa.model.dao.ClienteDao;
+
 /**
  *
  * @author 180917_GPO_SALINAS
@@ -15,6 +19,8 @@ public interface ServicioAClientes {
     public void cambiosDatosCliente(Cliente cliente);
     public Cliente consultarCliente(int claveCliente);
     public default void listarClientes(){
-        System.out.println("listando clientes");
+        ClienteDao dao=new ClienteDao();
+        List<Cliente> clientes=dao.obtenListadoClientes();
+        clientes.stream().forEach(s->System.out.println(s.toString()));
     }
 }

@@ -6,6 +6,8 @@
 package mx.com.gruposalinas.sistemas.casadebolsa.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.stream.Collectors;
 import mx.com.gruposalinas.sistemas.casadebolsa.model.entity.Accion;
 import mx.com.gruposalinas.sistemas.casadebolsa.model.entity.Cliente;
 import mx.com.gruposalinas.sistemas.casadebolsa.model.entity.Domicilio;
@@ -31,10 +33,9 @@ public class CasaDeBolsa {
         rfc = "";
         telefono = "9512038719";
         clientes = new ArrayList<>();
-
         acciones.add(new Accion("Acc1", 100.0, 10));
-        acciones.add(new Accion("Acc2", 200.0, 30));
-        acciones.add(new Accion("Acc3", 250.0, 25));
+        acciones.add(new Accion("Acc2", 200.0, 20));
+        acciones.add(new Accion("Acc3", 250.0, 30));
     }
 
     public static CasaDeBolsa getInstancia() {
@@ -93,6 +94,34 @@ public class CasaDeBolsa {
 
     public void imprimeAccionesDisponibles() {
         System.out.println("**ACCIONES DISPONIBLES**");
-        acciones.forEach(s -> {System.out.println(s.toString());System.out.println("---------------");});
+        acciones.forEach(s -> {
+            System.out.println(s.toString());
+            System.out.println("---------------");
+        });
+    }
+
+    public Accion venderAccion(String nombreAccion, int cantidad) {
+        Accion a = acciones.stream().filter(n -> n.getSimbolo().equals(nombreAccion)).collect(Collectors.toList()).get(0);
+        var cantidadAccionesDisponibles = a.getCantidad();
+        acciones.removeIf(n -> n.getCantidad() <= cantidad);
+        a.setCantidad(cantidadAccionesDisponibles - cantidad);
+        return new Accion(a.getSimbolo(), a.getPrecio(), cantidad);
+    }
+
+    public void comprarAccion(Accion accion) {
+        Accion a = acciones.stream().filter(n -> n.getSimbolo().equals(accion.getSimbolo())).collect(Collectors.toList()).get(0);
+        if (a != null) {
+            acciones.add(accion);
+        } else {
+            a.setCantidad(accion.getCantidad() + a.getCantidad());
+        }
+    }
+
+    public void imprimirDespedida() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("=============================\n");
+        sb.append("         ADIOS ");    
+        sb.append("\n=============================");
+        System.out.println(sb.toString());
     }
 }
